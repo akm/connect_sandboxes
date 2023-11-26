@@ -25,7 +25,14 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   return (
     <>
-      <form>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await client.say({
+            sentence: inputValue,
+          });
+        }}
+      >
         <input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
