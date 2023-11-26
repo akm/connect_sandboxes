@@ -5,10 +5,10 @@
 package greetv1connect
 
 import (
+	v1 "connect-go-example/gen/greet/v1"
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "example/gen/greet/v1"
 	http "net/http"
 	strings "strings"
 )
