@@ -22,10 +22,14 @@ const transport = createConnectTransport({
 const client = createPromiseClient(ElizaService, transport);
 
 function App() {
+  const [inputValue, setInputValue] = useState("");
   return (
     <>
       <form>
-        <input />
+        <input
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
         <button type="submit">Send</button>
       </form>
     </>
