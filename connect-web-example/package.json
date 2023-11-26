@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@buf/connectrpc_eliza.connectrpc_es": "^1.1.3-20230913231627-233fca715f49.1",
+    "@connectrpc/connect": "^1.1.3",
+    "@connectrpc/connect-web": "^1.1.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
