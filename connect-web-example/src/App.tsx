@@ -22,7 +22,14 @@ const transport = createConnectTransport({
 const client = createPromiseClient(ElizaService, transport);
 
 function App() {
-  return <>Hello world</>;
+  return (
+    <>
+      <form>
+        <input />
+        <button type="submit">Send</button>
+      </form>
+    </>
+  );
 }
 
 export default App;
