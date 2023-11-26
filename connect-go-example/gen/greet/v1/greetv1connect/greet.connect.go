@@ -39,7 +39,7 @@ const (
 
 // GreetServiceClient is a client for the greet.v1.GreetService service.
 type GreetServiceClient interface {
-	Greet(context.Context, *connect.Request[v1.GreetRequest]) (*connect.Response[v1.GreetResponse], error)
+	Greet(context.Context) *connect.ClientStreamForClient[v1.GreetRequest, v1.GreetResponse]
 }
 
 // NewGreetServiceClient constructs a client for the greet.v1.GreetService service. By default, it
@@ -66,13 +66,13 @@ type greetServiceClient struct {
 }
 
 // Greet calls greet.v1.GreetService.Greet.
-func (c *greetServiceClient) Greet(ctx context.Context, req *connect.Request[v1.GreetRequest]) (*connect.Response[v1.GreetResponse], error) {
-	return c.greet.CallUnary(ctx, req)
+func (c *greetServiceClient) Greet(ctx context.Context) *connect.ClientStreamForClient[v1.GreetRequest, v1.GreetResponse] {
+	return c.greet.CallClientStream(ctx)
 }
 
 // GreetServiceHandler is an implementation of the greet.v1.GreetService service.
 type GreetServiceHandler interface {
-	Greet(context.Context, *connect.Request[v1.GreetRequest]) (*connect.Response[v1.GreetResponse], error)
+	Greet(context.Context, *connect.ClientStream[v1.GreetRequest]) (*connect.Response[v1.GreetResponse], error)
 }
 
 // NewGreetServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -81,7 +81,7 @@ type GreetServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewGreetServiceHandler(svc GreetServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	greetServiceGreetHandler := connect.NewUnaryHandler(
+	greetServiceGreetHandler := connect.NewClientStreamHandler(
 		GreetServiceGreetProcedure,
 		svc.Greet,
 		opts...,
@@ -99,6 +99,6 @@ func NewGreetServiceHandler(svc GreetServiceHandler, opts ...connect.HandlerOpti
 // UnimplementedGreetServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedGreetServiceHandler struct{}
 
-func (UnimplementedGreetServiceHandler) Greet(context.Context, *connect.Request[v1.GreetRequest]) (*connect.Response[v1.GreetResponse], error) {
+func (UnimplementedGreetServiceHandler) Greet(context.Context, *connect.ClientStream[v1.GreetRequest]) (*connect.Response[v1.GreetResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("greet.v1.GreetService.Greet is not implemented"))
 }
