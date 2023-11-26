@@ -23,14 +23,38 @@ const client = createPromiseClient(ElizaService, transport);
 
 function App() {
   const [inputValue, setInputValue] = useState("");
+  const [messages, setMessages] = useState<
+    {
+      fromMe: boolean;
+      message: string;
+    }[]
+  >([]);
   return (
     <>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          await client.say({
+          // Clear inputValue since the user has submitted.
+          setInputValue("");
+          // Store the inputValue in the chain of messages and
+          // mark this message as coming from "me"
+          setMessages((prev) => [
+            ...prev,
+            {
+              fromMe: true,
+              message: inputValue,
+            },
+          ]);
+          const response = await client.say({
             sentence: inputValue,
           });
+          setMessages((prev) => [
+            ...prev,
+            {
+              fromMe: false,
+              message: response.sentence,
+            },
+          ]);
         }}
       >
         <input
