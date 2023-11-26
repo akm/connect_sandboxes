@@ -31,6 +31,13 @@ function App() {
   >([]);
   return (
     <>
+      <ol>
+        {messages.map((msg, index) => (
+          <li key={index}>
+            {`${msg.fromMe ? "ME:" : "ELIZA:"} ${msg.message}`}
+          </li>
+        ))}
+      </ol>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
