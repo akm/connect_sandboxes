@@ -17,6 +17,8 @@ func NewAuthInterceptor() *authInterceptor {
 	return &authInterceptor{}
 }
 
+var _ connect.Interceptor = (*authInterceptor)(nil)
+
 func (i *authInterceptor) WrapUnary(next connect.UnaryFunc) connect.UnaryFunc {
 	// Same as previous UnaryInterceptorFunc.
 	return connect.UnaryFunc(func(
