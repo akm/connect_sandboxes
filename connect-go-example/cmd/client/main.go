@@ -1,11 +1,11 @@
 package main
 
 import (
-	connectgoexample "connect-go-example"
 	"context"
 	"log"
 	"net/http"
 
+	connectgoexample "connect-go-example"
 	greetv1 "connect-go-example/gen/greet/v1"
 	"connect-go-example/gen/greet/v1/greetv1connect"
 
@@ -20,13 +20,24 @@ func main() {
 		"http://localhost:8080",
 		interceptors,
 	)
-	res, err := client.Greet(
+	stream := client.Greet(
 		context.Background(),
-		connect.NewRequest(&greetv1.GreetRequest{Name: "Jane"}),
 	)
+	if err := stream.Send(&greetv1.GreetRequest{Name: "Jane"}); err != nil {
+		log.Println(err)
+		return
+	}
+
+	if err := stream.Send(&greetv1.GreetRequest{Name: "Jack"}); err != nil {
+		log.Println(err)
+		return
+	}
+
+	res, err := stream.CloseAndReceive()
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
 	log.Println(res.Msg.Greeting)
 }
