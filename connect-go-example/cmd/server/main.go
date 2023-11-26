@@ -1,6 +1,7 @@
 package main
 
 import (
+	connectgoexample "connect-go-example"
 	"context"
 	"fmt"
 	"log"
@@ -29,9 +30,11 @@ func (s *GreetServer) Greet(
 }
 
 func main() {
+	interceptors := connect.WithInterceptors(connectgoexample.NewAuthInterceptor())
+
 	greeter := &GreetServer{}
 	mux := http.NewServeMux()
-	path, handler := greetv1connect.NewGreetServiceHandler(greeter)
+	path, handler := greetv1connect.NewGreetServiceHandler(greeter, interceptors)
 	mux.Handle(path, handler)
 	http.ListenAndServe(
 		"localhost:8080",

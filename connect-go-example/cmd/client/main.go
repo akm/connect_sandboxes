@@ -1,6 +1,7 @@
 package main
 
 import (
+	connectgoexample "connect-go-example"
 	"context"
 	"log"
 	"net/http"
@@ -12,10 +13,12 @@ import (
 )
 
 func main() {
+	interceptors := connect.WithInterceptors(connectgoexample.NewAuthInterceptor())
+
 	client := greetv1connect.NewGreetServiceClient(
 		http.DefaultClient,
 		"http://localhost:8080",
-		connect.WithGRPC(),
+		interceptors,
 	)
 	res, err := client.Greet(
 		context.Background(),
